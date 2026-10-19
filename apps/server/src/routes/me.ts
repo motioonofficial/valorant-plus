@@ -6,6 +6,7 @@ import { requireAuth } from '../auth/session.js';
 import { toShard, type RiotClient } from '../riot/client.js';
 import { syncUserMatches } from '../services/matchSync.js';
 import { getMatchDetail, listMatches } from '../services/matches.js';
+import { getProfile } from '../services/profile.js';
 import { getStatsSummary } from '../services/stats.js';
 import { getXp } from '../services/xp.js';
 
@@ -27,6 +28,8 @@ export function meRoutes(app: FastifyInstance, riot: RiotClient) {
     });
 
     scoped.get('/me/stats', async (request) => getStatsSummary(request.user!.puuid));
+
+    scoped.get('/me/profile', async (request) => getProfile(request.user!));
 
     scoped.get('/me/matches', async (request) => {
       const query = z

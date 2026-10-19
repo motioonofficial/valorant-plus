@@ -1,4 +1,5 @@
 // Shapes exchanged between the server and the desktop client.
+import type { Badge } from './badges.js';
 import type { Drill, MetricKey, WeakPoint } from './training.js';
 import type { LevelProgress } from './xp.js';
 
@@ -122,6 +123,43 @@ export interface MatchDetail {
   };
   /** The viewer's team first. */
   teams: { mine: boolean; roundsWon: number; players: ScoreboardRow[] }[];
+}
+
+export interface AgentStat {
+  agentId: string;
+  games: number;
+  wins: number;
+  kd: number | null;
+}
+
+export interface MapStat {
+  mapId: string;
+  games: number;
+  wins: number;
+}
+
+export interface XpHistoryItem {
+  type: string;
+  amount: number;
+  createdAt: string;
+  /** Set for match XP. */
+  mapId: string | null;
+  /** Set for training XP. */
+  drillId: string | null;
+}
+
+export interface ProfileResponse {
+  totals: { matches: number; customMatches: number; trainings: number; longestStreakWeeks: number };
+  currentTier: number | null;
+  /** Highest tier among stored competitive matches (not an official season peak). */
+  peakTier: number | null;
+  badges: Badge[];
+  /** Most played first. */
+  agents: AgentStat[];
+  /** Most played first. */
+  maps: MapStat[];
+  xpHistory: XpHistoryItem[];
+  settings: { dataSharing: boolean; publicProfile: boolean };
 }
 
 export type LfgKind = 'DUO' | 'TEAM' | 'FRIEND';

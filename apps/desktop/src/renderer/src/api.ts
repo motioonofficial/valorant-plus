@@ -7,6 +7,7 @@ import type {
   MatchDetail,
   MatchListResponse,
   MeResponse,
+  ProfileResponse,
   QueueFilter,
   StatsSummary,
   TrainingResponse,
@@ -28,6 +29,11 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
       ...init.headers,
     },
   });
+  if (res.status === 401 && token) {
+    // Session expired or the account was deleted: drop the token and go back to the login screen.
+    await window.drill.logout();
+    window.location.reload();
+  }
   if (!res.ok) {
     const body = (await res.json().catch(() => ({}))) as { error?: string };
     throw new ApiError(res.status, body.error ?? 'request_failed');
@@ -38,6 +44,10 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
 export const api = {
   me: () => request<MeResponse>('/me'),
   stats: () => request<StatsSummary>('/me/stats'),
+  profile: () => request<ProfileResponse>('/me/profile'),
+  updateSettings: (body: Partial<ProfileResponse['settings']>) =>
+    request<ProfileResponse['settings']>('/me/settings', { method: 'PATCH', body: JSON.stringify(body) }),
+  deleteAccount: () => request<{ ok: true }>('/me', { method: 'DELETE' }),
   matches: (opts: { queue?: QueueFilter; cursor?: string; limit?: number } = {}) => {
     const params = new URLSearchParams();
     if (opts.queue) params.set('queue', opts.queue);

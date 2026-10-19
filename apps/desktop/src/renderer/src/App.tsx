@@ -6,6 +6,7 @@ import { Lfg } from './pages/Lfg';
 import { Login } from './pages/Login';
 import { Matches } from './pages/Matches';
 import { Panel } from './pages/Panel';
+import { Profile } from './pages/Profile';
 import { Training } from './pages/Training';
 
 export function App() {
@@ -37,7 +38,7 @@ export function App() {
           <Route path="training" element={<Training />} />
           <Route path="matches" element={<Matches />} />
           <Route path="lobby" element={<ComingSoon title="5v5 Lobi" phase={3} />} />
-          <Route path="profile" element={<ComingSoon title="Profil" phase={1} />} />
+          <Route path="profile" element={<Profile />} />
           <Route path="lfg" element={<Lfg />} />
           <Route path="chat" element={<ComingSoon title="Sohbet" phase={2} />} />
           <Route path="news" element={<ComingSoon title="Haberler" phase={2} />} />
