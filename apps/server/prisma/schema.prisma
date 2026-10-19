@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  puuid         String    @unique
+  gameName      String
+  tagLine       String
+  shard         String
+  // Riot requires an explicit opt-in before a player's data is shown to others.
+  dataSharing   Boolean   @default(false)
+  publicProfile Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  lastSyncedAt  DateTime?
+
+  sessions  Session[]
+  xpEvents  XpEvent[]
+  lfgPosts  LfgPost[]
+  reports   Report[]  @relation("reporter")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  // SHA-256 of the bearer token; the raw token is only ever held by the client.
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  @@index([userId])
+}
+
+model Match {
+  matchId    String        @id
+  mapId      String
+  queueId    String
+  startedAt  DateTime
+  roundCount Int
+  players    MatchPlayer[]
+}
+
+model MatchPlayer {
+  matchId         String
+  match           Match   @relation(fields: [matchId], references: [matchId], onDelete: Cascade)
+  puuid           String
+  teamId          String
+  agentId         String
+  won             Boolean
+  roundsWon       Int
+  roundsLost      Int
+  kills           Int
+  deaths          Int
+  assists         Int
+  score           Int
+  damage          Int
+  headshots       Int
+  bodyshots       Int
+  legshots        Int
+  competitiveTier Int
+
+  @@id([matchId, puuid])
+  @@index([puuid])
+}
+
+model XpEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  amount    Int
+  // Makes awarding idempotent, e.g. "match:<matchId>" can only pay out once per user.
+  sourceKey String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, sourceKey])
+}
+
+enum LfgKind {
+  DUO
+  TEAM
+  FRIEND
+}
+
+model LfgPost {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind        LfgKind
+  text        String
+  mode        String
+  roles       String[]
+  tags        String[]
+  micRequired Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime
+  hidden      Boolean  @default(false)
+
+  @@index([kind, createdAt])
+}
+
+model Report {
+  id         String   @id @default(cuid())
+  reporterId String
+  reporter   User     @relation("reporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  targetType String
+  targetId   String
+  reason     String
+  createdAt  DateTime @default(now())
+  resolved   Boolean  @default(false)
+
+  @@index([targetType, targetId])
+}

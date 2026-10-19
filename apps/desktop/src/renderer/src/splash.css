@@ -1,0 +1,15 @@
+body { margin: 0; background: #0f1923; color: #ece8e1; font-family: 'Barlow', sans-serif; overflow: hidden; user-select: none; -webkit-app-region: drag; }
+#splash { position: relative; width: 100vw; height: 100vh; }
+.splash-panel { position: absolute; right: 0; top: 0; width: 46%; height: 100%; background: #ff4655; clip-path: polygon(30% 0, 100% 0, 100% 100%, 0 100%); }
+.splash-body { position: absolute; inset: 0 auto 0 0; width: 58%; box-sizing: border-box; padding: 48px 52px 36px; display: flex; flex-direction: column; }
+.splash-brand { display: flex; align-items: center; gap: 16px; font-family: 'Teko', sans-serif; font-weight: 700; font-size: 120px; line-height: 0.8; letter-spacing: 0.04em; }
+.splash-brand span { padding-top: 14px; }
+.splash-mark { width: 64px; height: 64px; background: #ff4655; clip-path: polygon(0 0, 100% 0, 100% 70%, 70% 100%, 0 100%); }
+.splash-slogan { margin-top: 14px; font-family: 'Teko', sans-serif; font-weight: 600; font-size: 30px; letter-spacing: 0.12em; color: #a7b0b9; }
+.splash-slogan em { font-style: normal; color: #ff4655; }
+.splash-bottom { margin-top: auto; display: flex; flex-direction: column; gap: 10px; }
+.splash-status { display: flex; justify-content: space-between; align-items: baseline; font-size: 14px; font-weight: 600; }
+.splash-status #pct { font-family: 'Teko', sans-serif; font-size: 26px; }
+.splash-bar { height: 6px; background: #2a3947; }
+.splash-bar #fill { width: 0; height: 100%; background: #ff4655; }
+.splash-foot { display: flex; justify-content: space-between; margin-top: 10px; font-size: 11px; color: #8592a0; }

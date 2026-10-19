@@ -1,0 +1,23 @@
+{
+  "name": "drill",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Open-source VALORANT companion: stats, training, XP and community. Not endorsed by Riot Games.",
+  "license": "MIT",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build:shared": "npm run build -w @drill/shared",
+    "dev:server": "npm run dev -w @drill/server",
+    "dev:desktop": "npm run dev -w @drill/desktop",
+    "typecheck": "npm run build:shared && npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "db:migrate": "npm run db:migrate -w @drill/server",
+    "postinstall": "npm run build:shared"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,15 @@
+# Local development database. Run: docker compose up -d
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: drill
+      POSTGRES_PASSWORD: drill
+      POSTGRES_DB: drill
+    ports:
+      - "5432:5432"
+    volumes:
+      - drill-pg:/var/lib/postgresql/data
+
+volumes:
+  drill-pg:
