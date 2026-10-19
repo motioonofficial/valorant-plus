@@ -5,6 +5,7 @@
 export const XP_RULES = {
   MATCH_COMPLETED: 80,
   LOBBY_MATCH_COMPLETED: 200,
+  /** Default only; each drill in the training catalog defines its own XP. */
   TRAINING_COMPLETED: 40,
   WEEKLY_QUEST_COMPLETED: 150,
 } as const;

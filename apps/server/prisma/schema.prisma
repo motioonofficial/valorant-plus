@@ -23,6 +23,7 @@ model User {
   xpEvents  XpEvent[]
   lfgPosts  LfgPost[]
   reports   Report[]  @relation("reporter")
+  trainings TrainingCompletion[]
 }
 
 model Session {
@@ -64,6 +65,9 @@ model MatchPlayer {
   bodyshots       Int
   legshots        Int
   competitiveTier Int
+  firstKills      Int     @default(0)
+  firstDeaths     Int     @default(0)
+  abilityCasts    Int     @default(0)
 
   @@id([matchId, puuid])
   @@index([puuid])
@@ -80,6 +84,20 @@ model XpEvent {
   createdAt DateTime @default(now())
 
   @@unique([userId, sourceKey])
+}
+
+// Self-reported: the app can't see what happens in the Range. Progress is measured from match data.
+model TrainingCompletion {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  drillId     String
+  // Calendar day in Europe/Istanbul (YYYY-MM-DD); one completion per drill per day.
+  day         String
+  completedAt DateTime @default(now())
+
+  @@unique([userId, drillId, day])
+  @@index([userId, completedAt])
 }
 
 enum LfgKind {

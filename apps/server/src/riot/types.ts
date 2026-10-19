@@ -25,6 +25,12 @@ export interface RiotMatch {
       kills: number;
       deaths: number;
       assists: number;
+      abilityCasts: {
+        grenadeCasts: number;
+        ability1Casts: number;
+        ability2Casts: number;
+        ultimateCasts: number;
+      } | null;
     } | null;
   }[];
   teams: {
@@ -36,6 +42,7 @@ export interface RiotMatch {
   roundResults: {
     playerStats: {
       puuid: string;
+      kills: { timeSinceRoundStartMillis: number; killer: string; victim: string }[];
       damage: { damage: number; headshots: number; bodyshots: number; legshots: number }[];
     }[];
   }[];

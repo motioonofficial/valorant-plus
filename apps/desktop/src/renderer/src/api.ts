@@ -1,4 +1,14 @@
-import type { ContentResponse, CreateLfgPostBody, LfgKind, LfgPostDto, MeResponse, RecentMatch, StatsSummary } from '@drill/shared';
+import type {
+  CompleteTrainingResponse,
+  ContentResponse,
+  CreateLfgPostBody,
+  LfgKind,
+  LfgPostDto,
+  MeResponse,
+  RecentMatch,
+  StatsSummary,
+  TrainingResponse,
+} from '@drill/shared';
 
 export class ApiError extends Error {
   constructor(readonly status: number, readonly code: string) {
@@ -31,6 +41,9 @@ export const api = {
   content: () => request<ContentResponse>('/content'),
   lfg: (kind: LfgKind) => request<LfgPostDto[]>(`/lfg?kind=${kind}`),
   createLfg: (body: CreateLfgPostBody) => request<{ id: string }>('/lfg', { method: 'POST', body: JSON.stringify(body) }),
+  training: () => request<TrainingResponse>('/training'),
+  completeTraining: (drillId: string) =>
+    request<CompleteTrainingResponse>(`/training/${encodeURIComponent(drillId)}/complete`, { method: 'POST' }),
   reportLfg: (id: string, reason: string) =>
     request<{ ok: true }>(`/lfg/${id}/report`, { method: 'POST', body: JSON.stringify({ reason }) }),
 };

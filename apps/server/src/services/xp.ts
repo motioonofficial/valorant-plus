@@ -2,9 +2,14 @@ import { XP_RULES, levelFromTotalXp, type XpEventType } from '@drill/shared';
 import { prisma } from '../db.js';
 
 /** Awards XP once per (user, sourceKey). Returns true if XP was actually granted. */
-export async function awardXp(userId: string, type: XpEventType, sourceKey: string): Promise<boolean> {
+export async function awardXp(
+  userId: string,
+  type: XpEventType,
+  sourceKey: string,
+  amount: number = XP_RULES[type],
+): Promise<boolean> {
   const result = await prisma.xpEvent.createMany({
-    data: [{ userId, type, amount: XP_RULES[type], sourceKey }],
+    data: [{ userId, type, amount, sourceKey }],
     skipDuplicates: true,
   });
   return result.count > 0;

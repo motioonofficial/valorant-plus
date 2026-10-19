@@ -1,5 +1,28 @@
 // Shapes exchanged between the server and the desktop client.
+import type { Drill, MetricKey, WeakPoint } from './training.js';
 import type { LevelProgress } from './xp.js';
+
+export interface TrainingDrillDto extends Drill {
+  completedToday: boolean;
+}
+
+export interface TrainingResponse {
+  /** Worst weakness, or null when there's no match data or every target is met. */
+  focus: MetricKey | null;
+  weakPoints: WeakPoint[];
+  /** Recommended order: drills for the worst weakness first. */
+  drills: TrainingDrillDto[];
+  week: { activeDays: number; xp: number };
+  today: { rewarded: number; maxRewarded: number };
+  /** Headshot % of the last matches, oldest first. */
+  headshotTrend: number[];
+}
+
+export interface CompleteTrainingResponse {
+  xpAwarded: number;
+  /** True when this drill was already completed today. */
+  alreadyDone: boolean;
+}
 
 export interface MeResponse {
   puuid: string;

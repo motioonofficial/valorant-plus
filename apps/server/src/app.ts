@@ -7,6 +7,7 @@ import { authRoutes } from './routes/auth.js';
 import { contentRoutes } from './routes/content.js';
 import { lfgRoutes } from './routes/lfg.js';
 import { meRoutes } from './routes/me.js';
+import { trainingRoutes } from './routes/training.js';
 
 export async function buildApp(config: Config) {
   const app = Fastify({ logger: true });
@@ -27,6 +28,7 @@ export async function buildApp(config: Config) {
   contentRoutes(app);
   meRoutes(app, riot);
   lfgRoutes(app);
+  trainingRoutes(app);
 
   return app;
 }
