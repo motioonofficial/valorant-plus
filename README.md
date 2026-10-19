@@ -1,5 +1,7 @@
 # DRILL
 
+[![CI](https://github.com/motioonofficial/valorant-plus/actions/workflows/ci.yml/badge.svg)](https://github.com/motioonofficial/valorant-plus/actions/workflows/ci.yml)
+
 Açık kaynak VALORANT yardımcı uygulaması: maç istatistikleri, kişisel antrenman, aktiviteye dayalı XP ve topluluk (oyuncu bulma, sohbet, 5v5 lobiler).
 
 > DRILL, Riot Games tarafından onaylanmamıştır ve Riot Games'in ya da Riot Games mülklerinin yapımında veya yönetiminde resmi olarak yer alan kimsenin görüş ve fikirlerini yansıtmaz. Riot Games ve ilişkili tüm mülkler Riot Games, Inc.'in ticari markaları veya tescilli ticari markalarıdır.
@@ -69,6 +71,10 @@ Ajan, harita ve rank görselleri çalışma anında topluluk tarafından işleti
 - **Faz 1:** RSO girişi, panel, maç geçmişi, XP ve görevler, antrenman, oyuncu bul ← şu an
 - **Faz 2:** Sohbet, haberler, arkadaşlık, moderasyon paneli
 - **Faz 3:** 5v5 ve 1v1 lobiler, sesli odalar (LiveKit), oyun içi overlay'ler
+
+## Katkı
+
+Katkılara açığız! Başlamadan önce [CONTRIBUTING.md](CONTRIBUTING.md)'yi oku, özellikle Riot kuralları bölümünü.
 
 ## Lisans
 

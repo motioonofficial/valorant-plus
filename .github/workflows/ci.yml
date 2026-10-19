@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Typecheck, test, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # The Electron binary isn't needed to typecheck or bundle the app.
+      ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Build desktop
+        run: npm run build -w @drill/desktop
+
+      - name: Validate Prisma schema
+        run: npx prisma validate --schema apps/server/prisma/schema.prisma
+        env:
+          DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
+
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fail on committed Riot keys or .env files
+        run: |
+          if git ls-files | grep -E '(^|/)\.env$'; then
+            echo "::error::A .env file is committed. Remove it and rotate any keys inside."
+            exit 1
+          fi
+          if git grep -nE 'RGAPI-[0-9a-fA-F]{8}-[0-9a-fA-F]{4}'; then
+            echo "::error::A Riot API key is committed. Remove it and regenerate the key in the Riot Developer Portal."
+            exit 1
+          fi
+          echo "No secrets found."
