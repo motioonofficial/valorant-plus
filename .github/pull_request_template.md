@@ -1,14 +1,14 @@
-## Ne değişti?
+## What changed?
 
-<!-- Kısaca: bu PR ne yapıyor ve neden? İlgili issue varsa: Closes #123 -->
+<!-- Briefly: what does this PR do and why? Link the issue if there is one: Closes #123 -->
 
-## Nasıl test edildi?
+## How was it tested?
 
-<!-- Hangi testleri ekledin / elle neyi denedin? -->
+<!-- Which tests did you add / what did you try manually? -->
 
-## Kontrol listesi
+## Checklist
 
-- [ ] `npm run typecheck` ve `npm test` geçiyor
-- [ ] Riot kurallarına uyuyor: beceri puanı yok, scouting yok, opt-in'siz veri yok, maç içi avantaj yok, bahis yok ([CONTRIBUTING.md](../CONTRIBUTING.md))
-- [ ] `.env`, API anahtarı veya Riot görseli eklenmedi
-- [ ] Şema değiştiyse migration eklendi
+- [ ] `npm run typecheck` and `npm test` pass
+- [ ] Follows Riot's rules: no skill rating, no scouting, no data without opt-in, no in-match advantage, no betting ([CONTRIBUTING.md](../CONTRIBUTING.md))
+- [ ] No `.env`, API key or Riot image added to the app code
+- [ ] Migration added if the schema changed

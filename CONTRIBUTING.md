@@ -1,26 +1,28 @@
-# Katkı rehberi
+# Contributing
 
-DRILL'e katkı vermek istediğin için teşekkürler! Bu belge kurulumu, kuralları ve bir pull request'in nasıl kabul edildiğini anlatır.
+🇬🇧 English · 🇹🇷 [Türkçe](CONTRIBUTING.tr.md)
 
-## Önce şunu oku: Riot kuralları
+Thanks for wanting to contribute to DRILL! This guide covers setup, the rules, and what gets a pull request merged.
 
-DRILL, [Riot Developer Policy](https://developer.riotgames.com/policies/general)'ye uyduğu sürece yaşayabilir. Bu kuralları bozan bir PR, kodu ne kadar iyi olursa olsun **kabul edilmez**:
+## Read this first: Riot's rules
 
-| Yapma | Neden |
+DRILL can only exist as long as it follows the [Riot Developer Policy](https://developer.riotgames.com/policies/general). A PR that breaks these rules **won't be merged**, however good the code is:
+
+| Don't | Why |
 |---|---|
-| Kills, wins, K/D gibi performansa dayalı bir puan, ELO/MMR veya sıralama eklemek | Riot resmi ranked merdivenine alternatif sistemleri yasaklıyor. XP yalnızca aktiviteden gelir. |
-| Maç başlamadan rakiplerin (veya takım arkadaşlarının) rankını/istatistiğini göstermek | "Scouting" onaylı bir kullanım değil. |
-| Hesabını bağlayıp paylaşımı açmamış bir oyuncunun verisini başkasına göstermek | Opt-in zorunlu. |
-| Maç sırasında oyun bilgisi veren overlay (ekonomi, pozisyon, canlı hasar…) | Anında avantaj sağlayan overlay'ler yasak. |
-| Bahis, ödüllü 1v1, şans oyunu | Kumar yasak. |
-| Riot istemcisinin resmi olmayan yerel API'sini kullanmak, oyunu otomatikleştirmek | ToS ihlali; kullanıcıların hesapları ban yiyebilir. |
-| Riot görsellerini (ajan, harita, rank ikonları) uygulama koduna dosya olarak eklemek | Görseller çalışma anında URL ile gelir. Tek istisna README'deki `docs/screenshots/` tanıtım görüntüleri. |
+| Add a score, ELO/MMR or ranking based on performance (kills, wins, K/D…) | Riot forbids alternatives to the official ranked ladder. XP only comes from activity. |
+| Show opponents' (or teammates') rank/stats before a match starts | Scouting isn't an approved use case. |
+| Show data of a player who hasn't linked their account and enabled sharing | Opt-in is required. |
+| Add an overlay that gives in-match information (economy, positions, live damage…) | Overlays that give an immediate advantage are forbidden. |
+| Add betting, prize 1v1s or games of chance | Gambling is forbidden. |
+| Use the Riot client's unofficial local API or automate the game | Breaks the ToS; users' accounts could get banned. |
+| Add Riot images (agents, maps, rank icons) to the app code as files | Images are loaded by URL at runtime. The only exception is the promotional screenshots in `docs/screenshots/`. |
 
-Emin değilsen önce bir issue aç ve sor.
+Not sure? Open an issue and ask first.
 
-## Geliştirme ortamı
+## Development setup
 
-Gereksinim: Node.js 20+ (CI Node 22 kullanır). Docker veya PostgreSQL kurulu olması gerekmez.
+Requirement: Node.js 20+ (CI uses Node 22). No Docker or PostgreSQL install needed.
 
 ```bash
 git clone https://github.com/motioonofficial/valorant-plus.git
@@ -28,51 +30,51 @@ cd valorant-plus
 npm install
 
 cp apps/server/.env.example apps/server/.env
-# .env içinde DEV_LOGIN=true yap (Riot anahtarı gerekmez)
+# set DEV_LOGIN=true in .env (no Riot key needed)
 
-npm run db:local -w @drill/server   # ayrı terminalde açık kalsın
+npm run db:local -w @drill/server   # keep running in its own terminal
 npm run db:migrate
-npm run db:seed -w @drill/server    # örnek maçlar
+npm run db:seed -w @drill/server    # sample matches
 npm run dev:server
 npm run dev:desktop
 ```
 
-Giriş ekranındaki **Geliştirici girişi** ile örnek verili bir kullanıcıyla girersin.
+Use **developer login** on the login screen to sign in as a user with sample data.
 
-## Proje yapısı
+## Project structure
 
 ```
-apps/server      Fastify + Prisma — API, RSO, maç eşitleme, XP, LFG
-apps/desktop     Electron + React — masaüstü istemci
-packages/shared  Sunucu ve istemcinin ortak tipleri ve kuralları
+apps/server      Fastify + Prisma: API, RSO, match sync, XP, LFG
+apps/desktop     Electron + React: desktop client
+packages/shared  Types and rules shared by server and client
 ```
 
-Sunucuyla istemci arasında taşınan her tip `packages/shared/src/api.ts` içinde tanımlanır. Bir uç noktayı değiştiriyorsan önce orayı güncelle.
+Every type that travels between server and client is defined in `packages/shared/src/api.ts`. If you change an endpoint, update it there first.
 
-## PR göndermeden önce
+## Before opening a PR
 
 ```bash
 npm run typecheck
 npm test
 ```
 
-İkisi de geçmeli; aynı kontroller GitHub Actions'ta da her PR için çalışır.
+Both must pass; GitHub Actions runs the same checks on every PR.
 
-- **Test:** Saf mantık (hesaplamalar, veri dönüşümleri) için test yaz. Örnekler: `packages/shared/src/xp.test.ts`, `apps/server/src/services/matchMapper.test.ts`.
-- **Veritabanı değişikliği:** `prisma/schema.prisma`'yı değiştirdiysen `npm run db:migrate -- --name kisa-aciklama` ile bir migration oluştur ve onu da commit'le.
-- **Gizli bilgi:** `.env` dosyasını veya bir API anahtarını asla commit'leme. CI bunu yakalar ve PR'ı düşürür. Yanlışlıkla commit'lediysen anahtarı Riot portalında hemen yenile.
-- **Küçük tut:** Bir PR tek bir şeyi değiştirsin. Büyük bir özellik için önce issue açıp yaklaşımı konuşalım.
+- **Tests:** Write tests for pure logic (calculations, data mapping). Examples: `packages/shared/src/xp.test.ts`, `apps/server/src/services/matchMapper.test.ts`.
+- **Database changes:** If you changed `prisma/schema.prisma`, create a migration with `npm run db:migrate -- --name short-description` and commit it.
+- **Secrets:** Never commit a `.env` file or an API key. CI catches this and fails the PR. If you committed one by accident, regenerate the key in the Riot portal right away.
+- **Keep it small:** One PR, one change. For a big feature, open an issue first so we can agree on the approach.
 
-## Kod stili
+## Code style
 
-- TypeScript `strict` modda; `any` kullanma.
-- Çevredeki kodun stiline uy: isimlendirme, dosya düzeni, yorum yoğunluğu.
-- Kullanıcıya görünen metinler Türkçe; kod, değişken isimleri ve commit mesajları İngilizce.
-- Yorumlar *ne* değil *neden* anlatsın (özellikle Riot kurallarından gelen kararlar için).
+- TypeScript in `strict` mode; no `any`.
+- Match the surrounding code: naming, file layout, comment density.
+- User-facing text is in Turkish for now; code, identifiers, commit messages and docs are in English.
+- Comments explain *why*, not *what* (especially for decisions that come from Riot's rules).
 
-## Commit mesajları
+## Commit messages
 
-Kısa, emir kipinde ve İngilizce bir başlık; gerekirse altında açıklama:
+A short, imperative English subject line, with a body if needed:
 
 ```
 Add weekly quest progress to the panel
@@ -80,10 +82,10 @@ Add weekly quest progress to the panel
 Quests reset on Monday 00:00 Europe/Istanbul.
 ```
 
-## Sorun bildirme
+## Reporting issues
 
-Hata bildirirken şunları yaz: ne yaptın, ne bekledin, ne oldu, işletim sistemi ve Node sürümü. Güvenlik açığı bulduysan herkese açık issue açma; repo sahibine doğrudan ulaş.
+When reporting a bug, include: what you did, what you expected, what happened, your OS and Node version. If you found a security issue, don't open a public issue; contact the repo owner directly.
 
-## Lisans
+## License
 
-Katkıların projenin [MIT lisansı](LICENSE) altında yayımlanır.
+Your contributions are released under the project's [MIT license](LICENSE).
