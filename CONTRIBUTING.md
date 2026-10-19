@@ -14,7 +14,7 @@ DRILL, [Riot Developer Policy](https://developer.riotgames.com/policies/general)
 | Maç sırasında oyun bilgisi veren overlay (ekonomi, pozisyon, canlı hasar…) | Anında avantaj sağlayan overlay'ler yasak. |
 | Bahis, ödüllü 1v1, şans oyunu | Kumar yasak. |
 | Riot istemcisinin resmi olmayan yerel API'sini kullanmak, oyunu otomatikleştirmek | ToS ihlali; kullanıcıların hesapları ban yiyebilir. |
-| Riot görsellerini (ajan, harita, rank ikonları) repoya eklemek | Görseller çalışma anında URL ile gelir. |
+| Riot görsellerini (ajan, harita, rank ikonları) uygulama koduna dosya olarak eklemek | Görseller çalışma anında URL ile gelir. Tek istisna README'deki `docs/screenshots/` tanıtım görüntüleri. |
 
 Emin değilsen önce bir issue aç ve sor.
 

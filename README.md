@@ -6,6 +6,18 @@ Açık kaynak VALORANT yardımcı uygulaması: maç istatistikleri, kişisel ant
 
 > DRILL, Riot Games tarafından onaylanmamıştır ve Riot Games'in ya da Riot Games mülklerinin yapımında veya yönetiminde resmi olarak yer alan kimsenin görüş ve fikirlerini yansıtmaz. Riot Games ve ilişkili tüm mülkler Riot Games, Inc.'in ticari markaları veya tescilli ticari markalarıdır.
 
+## Ekranlar
+
+> Tasarım prototipinden görüntüler. İsimler ve sayılar örnek veridir; uygulamanın tamamı henüz kodlanmadı (bkz. [Yol haritası](#yol-haritası)).
+
+| Giriş | Panel |
+|---|---|
+| ![Giriş ekranı: Riot hesabı bağlama ve veri paylaşımı onayı](docs/screenshots/login.jpg) | ![Panel: rank, seviye, istatistikler ve son maçlar](docs/screenshots/panel.jpg) |
+| **Maç geçmişi** | **Oyuncu bul** |
+| ![Maç geçmişi ve maç detayı; bağlanmamış oyuncuların adları gizli](docs/screenshots/matches.jpg) | ![Duo, takım ve arkadaş ilanları](docs/screenshots/lfg.jpg) |
+| **Sohbet ve sesli odalar** | **Oyun içi overlay: maç sonu** |
+| ![Metin kanalları, sesli oda ve moderasyon araçları](docs/screenshots/chat.jpg) | ![Maç bittikten sonra açılan kişisel özet overlay'i](docs/screenshots/post-match.jpg) |
+
 ## Kurallar (Riot Developer Policy)
 
 Bu proje Riot'un geliştirici politikasına uyacak şekilde tasarlandı. Katkı verirken bunları bozma:
@@ -78,4 +90,4 @@ Katkılara açığız! Başlamadan önce [CONTRIBUTING.md](CONTRIBUTING.md)'yi o
 
 ## Lisans
 
-[MIT](LICENSE). Riot Games'e ait görseller (ajan, harita, rank ikonları) bu repoya dahil edilmez.
+[MIT](LICENSE). Uygulama kodu Riot Games'e ait görsel dosyası (ajan, harita, rank ikonları) içermez; bunlar çalışma anında URL ile yüklenir. `docs/screenshots/` altındaki tanıtım görüntülerinde görünen oyun görselleri Riot Games'e aittir ve MIT lisansının kapsamında değildir.
