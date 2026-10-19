@@ -1,6 +1,7 @@
 import { competitiveTierName, type LfgKind } from '@drill/shared';
 import { useState, type FormEvent } from 'react';
 import { ApiError, api } from '../api';
+import { ErrorBox } from '../components/ErrorBox';
 import { useAsync } from '../hooks/useAsync';
 import { useContent } from '../hooks/useContent';
 
@@ -52,7 +53,7 @@ export function Lfg() {
         ))}
       </div>
 
-      {posts.error && <div className="error">İlanlar yüklenemedi: {posts.error.message}</div>}
+      {posts.error && <ErrorBox message={`İlanlar yüklenemedi: ${posts.error.message}`} onRetry={posts.reload} />}
       {posts.data?.length === 0 && <p className="muted">Bu kategoride henüz ilan yok. İlk ilanı sen ver.</p>}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 16 }}>

@@ -4,8 +4,10 @@ import type {
   CreateLfgPostBody,
   LfgKind,
   LfgPostDto,
+  MatchDetail,
+  MatchListResponse,
   MeResponse,
-  RecentMatch,
+  QueueFilter,
   StatsSummary,
   TrainingResponse,
 } from '@drill/shared';
@@ -36,7 +38,15 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
 export const api = {
   me: () => request<MeResponse>('/me'),
   stats: () => request<StatsSummary>('/me/stats'),
-  matches: () => request<RecentMatch[]>('/me/matches'),
+  matches: (opts: { queue?: QueueFilter; cursor?: string; limit?: number } = {}) => {
+    const params = new URLSearchParams();
+    if (opts.queue) params.set('queue', opts.queue);
+    if (opts.cursor) params.set('cursor', opts.cursor);
+    if (opts.limit) params.set('limit', String(opts.limit));
+    const qs = params.toString();
+    return request<MatchListResponse>(`/me/matches${qs ? `?${qs}` : ''}`);
+  },
+  matchDetail: (matchId: string) => request<MatchDetail>(`/me/matches/${encodeURIComponent(matchId)}`),
   sync: () => request<{ newMatches: number; xpAwarded: number }>('/me/sync', { method: 'POST' }),
   content: () => request<ContentResponse>('/content'),
   lfg: (kind: LfgKind) => request<LfgPostDto[]>(`/lfg?kind=${kind}`),

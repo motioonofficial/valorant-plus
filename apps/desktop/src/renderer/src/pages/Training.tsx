@@ -1,6 +1,7 @@
 import { DRILL_CATEGORIES, type DrillCategory, type MetricKey, type TrainingDrillDto, type WeakPoint } from '@drill/shared';
 import { useState } from 'react';
 import { api } from '../api';
+import { ErrorBox } from '../components/ErrorBox';
 import { useAsync } from '../hooks/useAsync';
 import { useContent } from '../hooks/useContent';
 
@@ -33,7 +34,7 @@ export function Training() {
   const [filter, setFilter] = useState<Filter>('all');
   const [notice, setNotice] = useState<string | null>(null);
 
-  if (training.error) return <div className="error">Antrenman yüklenemedi: {training.error.message}</div>;
+  if (training.error) return <ErrorBox message={`Antrenman yüklenemedi: ${training.error.message}`} onRetry={training.reload} />;
   const data = training.data;
 
   const focusPoint = data?.focus ? data.weakPoints.find((p) => p.key === data.focus) : undefined;

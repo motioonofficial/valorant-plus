@@ -12,6 +12,7 @@ export interface RiotMatch {
     mapId: string;
     queueId: string;
     gameStartMillis: number;
+    gameLengthMillis: number | null;
     isCompleted: boolean;
   };
   players: {
@@ -40,6 +41,7 @@ export interface RiotMatch {
     roundsWon: number;
   }[];
   roundResults: {
+    winningTeam: string;
     playerStats: {
       puuid: string;
       kills: { timeSinceRoundStartMillis: number; killer: string; victim: string }[];

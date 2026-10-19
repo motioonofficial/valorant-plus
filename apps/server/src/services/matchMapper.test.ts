@@ -5,7 +5,7 @@ import { mapRiotMatch } from './matchMapper.js';
 const casts = (n: number) => ({ grenadeCasts: n, ability1Casts: n, ability2Casts: n, ultimateCasts: 0 });
 
 const fixture: RiotMatch = {
-  matchInfo: { matchId: 'm1', mapId: '/Game/Maps/Ascent/Ascent', queueId: 'competitive', gameStartMillis: 1_700_000_000_000, isCompleted: true },
+  matchInfo: { matchId: 'm1', mapId: '/Game/Maps/Ascent/Ascent', queueId: 'competitive', gameStartMillis: 1_700_000_000_000, gameLengthMillis: 1_800_000, isCompleted: true },
   players: [
     { puuid: 'me', teamId: 'Red', characterId: 'jett', competitiveTier: 13, stats: { score: 600, roundsPlayed: 3, kills: 4, deaths: 2, assists: 1, abilityCasts: casts(2) } },
     { puuid: 'them', teamId: 'Blue', characterId: 'sova', competitiveTier: 12, stats: { score: 300, roundsPlayed: 3, kills: 2, deaths: 4, assists: 0, abilityCasts: null } },
@@ -16,6 +16,7 @@ const fixture: RiotMatch = {
   ],
   roundResults: [
     {
+      winningTeam: 'Red',
       // "me" opens the round, then trades into a later death
       playerStats: [
         { puuid: 'me', kills: [{ timeSinceRoundStartMillis: 12_000, killer: 'me', victim: 'them' }], damage: [{ damage: 150, headshots: 1, bodyshots: 1, legshots: 0 }] },
@@ -23,13 +24,14 @@ const fixture: RiotMatch = {
       ],
     },
     {
+      winningTeam: 'Blue',
       // the earliest kill is listed under the second player; order must not matter
       playerStats: [
         { puuid: 'me', kills: [{ timeSinceRoundStartMillis: 40_000, killer: 'me', victim: 'them' }], damage: [{ damage: 100, headshots: 0, bodyshots: 2, legshots: 1 }] },
         { puuid: 'them', kills: [{ timeSinceRoundStartMillis: 9_000, killer: 'them', victim: 'me' }], damage: [{ damage: 80, headshots: 0, bodyshots: 2, legshots: 0 }] },
       ],
     },
-    { playerStats: [] },
+    { winningTeam: 'Red', playerStats: [] },
   ],
 };
 
@@ -42,6 +44,8 @@ describe('mapRiotMatch', () => {
       queueId: 'competitive',
       startedAt: new Date(1_700_000_000_000),
       roundCount: 3,
+      gameLengthMs: 1_800_000,
+      roundWinners: ['Red', 'Blue', 'Red'],
     });
   });
 
@@ -63,7 +67,7 @@ describe('mapRiotMatch', () => {
   });
 
   it('ignores rounds without kills when counting openings', () => {
-    const quiet: RiotMatch = { ...fixture, roundResults: [{ playerStats: [] }] };
+    const quiet: RiotMatch = { ...fixture, roundResults: [{ winningTeam: 'Red', playerStats: [] }] };
     expect(mapRiotMatch(quiet).players[0]).toMatchObject({ firstKills: 0, firstDeaths: 0 });
   });
 

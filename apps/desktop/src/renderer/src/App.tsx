@@ -4,6 +4,7 @@ import { Layout } from './components/Layout';
 import { ComingSoon } from './pages/ComingSoon';
 import { Lfg } from './pages/Lfg';
 import { Login } from './pages/Login';
+import { Matches } from './pages/Matches';
 import { Panel } from './pages/Panel';
 import { Training } from './pages/Training';
 
@@ -34,7 +35,7 @@ export function App() {
         <Route element={<Layout onLogout={logout} />}>
           <Route index element={<Panel />} />
           <Route path="training" element={<Training />} />
-          <Route path="matches" element={<ComingSoon title="Maçlar" phase={1} />} />
+          <Route path="matches" element={<Matches />} />
           <Route path="lobby" element={<ComingSoon title="5v5 Lobi" phase={3} />} />
           <Route path="profile" element={<ComingSoon title="Profil" phase={1} />} />
           <Route path="lfg" element={<Lfg />} />

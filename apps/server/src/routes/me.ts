@@ -5,7 +5,8 @@ import { prisma } from '../db.js';
 import { requireAuth } from '../auth/session.js';
 import { toShard, type RiotClient } from '../riot/client.js';
 import { syncUserMatches } from '../services/matchSync.js';
-import { getRecentMatches, getStatsSummary } from '../services/stats.js';
+import { getMatchDetail, listMatches } from '../services/matches.js';
+import { getStatsSummary } from '../services/stats.js';
 import { getXp } from '../services/xp.js';
 
 export function meRoutes(app: FastifyInstance, riot: RiotClient) {
@@ -27,7 +28,24 @@ export function meRoutes(app: FastifyInstance, riot: RiotClient) {
 
     scoped.get('/me/stats', async (request) => getStatsSummary(request.user!.puuid));
 
-    scoped.get('/me/matches', async (request) => getRecentMatches(request.user!.puuid));
+    scoped.get('/me/matches', async (request) => {
+      const query = z
+        .object({
+          queue: z.enum(['all', 'competitive', 'unrated', 'custom']).default('all'),
+          cursor: z.string().datetime().optional(),
+          limit: z.coerce.number().int().min(1).max(50).optional(),
+        })
+        .parse(request.query);
+      return listMatches(request.user!.puuid, query);
+    });
+
+    scoped.get('/me/matches/:matchId', async (request, reply) => {
+      const { matchId } = z.object({ matchId: z.string().min(1).max(128) }).parse(request.params);
+      const detail = await getMatchDetail(request.user!.puuid, matchId);
+      // Same 404 for "doesn't exist" and "you weren't in it", so match ids can't be probed.
+      if (!detail) return reply.code(404).send({ error: 'match_not_found' });
+      return detail;
+    });
 
     scoped.post('/me/sync', async (request) => syncUserMatches(riot, request.user!));
 

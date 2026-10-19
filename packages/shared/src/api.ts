@@ -84,6 +84,46 @@ export interface ContentResponse {
   tierIcons: Record<number, string>;
 }
 
+export interface MatchListResponse {
+  items: RecentMatch[];
+  /** Pass back as `cursor` to load older matches; null when there are no more. */
+  nextCursor: string | null;
+}
+
+export interface ScoreboardRow {
+  isMe: boolean;
+  /** Riot ID, only for the viewer and for players who opted in to sharing. Others stay anonymous. */
+  name: string | null;
+  agentId: string;
+  kills: number;
+  deaths: number;
+  assists: number;
+  acs: number;
+}
+
+export interface MatchDetail {
+  matchId: string;
+  mapId: string;
+  queueId: string;
+  startedAt: string;
+  gameLengthMs: number;
+  won: boolean;
+  /** Each round from the viewer's side, in order. */
+  rounds: ('win' | 'loss')[];
+  me: {
+    agentId: string;
+    kills: number;
+    deaths: number;
+    assists: number;
+    acs: number;
+    adr: number | null;
+    headshotPct: number | null;
+    firstKills: number;
+  };
+  /** The viewer's team first. */
+  teams: { mine: boolean; roundsWon: number; players: ScoreboardRow[] }[];
+}
+
 export type LfgKind = 'DUO' | 'TEAM' | 'FRIEND';
 
 export interface LfgPostDto {

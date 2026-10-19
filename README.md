@@ -14,8 +14,8 @@ Early and in active development. **Not approved by Riot yet**: the production ke
 
 | Works today | Designed, not coded yet |
 |---|---|
-| Server: RSO login flow, match sync, stats, activity XP, training, LFG posts + reports | Profile, chat, news, 1v1, 5v5 lobbies |
-| Desktop: splash, login with opt-in, panel, training, LFG | Voice rooms, in-game overlays |
+| Server: RSO login flow, match sync, stats, activity XP, training, match history + detail, LFG posts + reports | Profile, chat, news, 1v1, 5v5 lobbies |
+| Desktop: splash, login with opt-in, panel, training, match history, LFG | Voice rooms, in-game overlays |
 | Local dev without a Riot key (`DEV_LOGIN` + sample data) | |
 
 ## Screens

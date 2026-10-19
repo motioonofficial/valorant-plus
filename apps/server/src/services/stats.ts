@@ -1,38 +1,10 @@
-import type { RecentMatch, StatsSummary } from '@drill/shared';
+import type { StatsSummary } from '@drill/shared';
 import { prisma } from '../db.js';
 
 const RECENT_LIMIT = 20;
 
 function ratio(a: number, b: number): number | null {
   return b === 0 ? null : a / b;
-}
-
-export async function getRecentMatches(puuid: string, limit = RECENT_LIMIT): Promise<RecentMatch[]> {
-  const rows = await prisma.matchPlayer.findMany({
-    where: { puuid },
-    include: { match: true },
-    orderBy: { match: { startedAt: 'desc' } },
-    take: limit,
-  });
-
-  return rows.map((r) => {
-    const shots = r.headshots + r.bodyshots + r.legshots;
-    return {
-      matchId: r.matchId,
-      mapId: r.match.mapId,
-      queueId: r.match.queueId,
-      startedAt: r.match.startedAt.toISOString(),
-      agentId: r.agentId,
-      won: r.won,
-      roundsWon: r.roundsWon,
-      roundsLost: r.roundsLost,
-      kills: r.kills,
-      deaths: r.deaths,
-      assists: r.assists,
-      acs: r.match.roundCount === 0 ? 0 : Math.round(r.score / r.match.roundCount),
-      headshotPct: ratio(r.headshots, shots),
-    };
-  });
 }
 
 export async function getStatsSummary(puuid: string): Promise<StatsSummary> {

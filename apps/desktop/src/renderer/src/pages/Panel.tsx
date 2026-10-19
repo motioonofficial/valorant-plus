@@ -1,6 +1,8 @@
 import { competitiveTierName, type RecentMatch } from '@drill/shared';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { api } from '../api';
+import { ErrorBox } from '../components/ErrorBox';
 import { useAsync } from '../hooks/useAsync';
 import { useContent } from '../hooks/useContent';
 
@@ -16,7 +18,8 @@ function mostPlayedAgent(matches: RecentMatch[]): string | null {
 export function Panel() {
   const me = useAsync(api.me);
   const stats = useAsync(api.stats);
-  const matches = useAsync(api.matches);
+  const matches = useAsync(() => api.matches({ limit: 20 }));
+  const recent = matches.data?.items ?? null;
   const content = useContent();
   const [syncing, setSyncing] = useState(false);
   const [syncError, setSyncError] = useState<string | null>(null);
@@ -36,9 +39,9 @@ export function Panel() {
     }
   };
 
-  if (me.error) return <div className="error">Profil yüklenemedi: {me.error.message}</div>;
+  if (me.error) return <ErrorBox message={`Profil yüklenemedi: ${me.error.message}`} onRetry={me.reload} />;
 
-  const mainAgentId = matches.data ? mostPlayedAgent(matches.data) : null;
+  const mainAgentId = recent ? mostPlayedAgent(recent) : null;
   const mainAgent = mainAgentId ? content?.agents[mainAgentId] : undefined;
   const tier = stats.data?.competitiveTier ?? null;
   const tierIcon = tier != null ? content?.tierIcons[tier] : undefined;
@@ -100,14 +103,17 @@ export function Panel() {
       <section className="card">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h2 style={{ fontSize: 30 }}>SON MAÇLAR</h2>
+          <Link to="/matches" style={{ marginLeft: 'auto', marginRight: 16, fontSize: 14, fontWeight: 600 }}>
+            Tümünü gör
+          </Link>
           <button type="button" className="btn" onClick={sync} disabled={syncing}>
             {syncing ? 'EŞİTLENİYOR…' : 'MAÇLARI EŞİTLE'}
           </button>
         </div>
         {syncError && <div className="error">Eşitleme başarısız: {syncError}</div>}
-        {matches.data?.length === 0 && <p className="muted">Henüz maç yok. "Maçları eşitle" ile Riot'tan çek.</p>}
+        {recent?.length === 0 && <p className="muted">Henüz maç yok. "Maçları eşitle" ile Riot'tan çek.</p>}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {matches.data?.map((m) => {
+          {recent?.slice(0, 5).map((m) => {
             const agent = content?.agents[m.agentId.toLowerCase()];
             const map = content?.maps[m.mapId];
             return (

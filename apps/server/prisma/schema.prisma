@@ -42,9 +42,14 @@ model Match {
   matchId    String        @id
   mapId      String
   queueId    String
-  startedAt  DateTime
-  roundCount Int
-  players    MatchPlayer[]
+  startedAt    DateTime
+  roundCount   Int
+  gameLengthMs Int           @default(0)
+  // Winning team id of each round, in order.
+  roundWinners String[]      @default([])
+  players      MatchPlayer[]
+
+  @@index([startedAt])
 }
 
 model MatchPlayer {

@@ -6,6 +6,9 @@ export interface MatchRow {
   queueId: string;
   startedAt: Date;
   roundCount: number;
+  gameLengthMs: number;
+  /** Winning team id of each round, in order. */
+  roundWinners: string[];
 }
 
 export interface MatchPlayerRow {
@@ -102,6 +105,8 @@ export function mapRiotMatch(match: RiotMatch): { match: MatchRow; players: Matc
       queueId: matchInfo.queueId,
       startedAt: new Date(matchInfo.gameStartMillis),
       roundCount,
+      gameLengthMs: matchInfo.gameLengthMillis ?? 0,
+      roundWinners: match.roundResults.map((r) => r.winningTeam),
     },
     players,
   };

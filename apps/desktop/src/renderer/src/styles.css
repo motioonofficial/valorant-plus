@@ -69,6 +69,17 @@ button { font: inherit; }
 .win { color: var(--win); }
 .loss { color: var(--accent); }
 
+.match-item { position: relative; display: flex; align-items: center; gap: 12px; height: 68px; padding: 0 14px 0 0; overflow: hidden; border: 0; background: var(--panel); color: var(--text); font: inherit; text-align: left; cursor: pointer; }
+.match-item.selected { background: #1f2e3b; outline: 2px solid var(--text); outline-offset: -2px; }
+.match-item-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.22; }
+.round-cell { flex: 1 0 18px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--bg); }
+.scoreboard-row { display: flex; align-items: center; gap: 12px; height: 46px; padding-right: 10px; background: var(--bg); }
+.scoreboard-row.me { background: #22323f; }
+.scoreboard-row img { background: #1a2733; }
+.scoreboard-cols { display: flex; gap: 28px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.scoreboard-cols > :first-child { width: 90px; text-align: right; }
+.scoreboard-cols > :last-child { width: 40px; text-align: right; }
+
 .login-art { position: relative; flex: 1 1 520px; overflow: hidden; background: var(--accent); }
 .login-art img { position: absolute; right: -80px; bottom: -120px; height: 112%; width: auto; }
 .login-art-text { position: absolute; left: 32px; top: 24px; font-family: 'Teko', sans-serif; font-weight: 700; font-size: 200px; line-height: 0.85; color: transparent; -webkit-text-stroke: 2px rgba(15, 25, 35, 0.35); }
